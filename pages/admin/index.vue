@@ -74,65 +74,46 @@
                                     <UAvatar 
                                         :src="row.original.photoUrl" 
                                         :alt="row.original.fullName" 
-                                        size="sm" />
+                                        size="md" />
                                 </template>
                                 <template #fullName-cell="{ row }">
-                                    <div class="font-medium">{{ row.original.fullName }}</div>
-                                    <div class="text-xs text-gray-500">{{ row.original.position }}</div>
-                                    <div class="text-xs text-gray-400" v-if="row.original.grade">Grade: {{ row.original.grade }}</div>
-                                </template>
-                                <template #employeeId-cell="{ row }">
-                                    <UBadge color="neutral" variant="subtle">{{ row.original.employeeId }}</UBadge>
-                                    <div class="text-xs text-gray-500 mt-1" v-if="row.original.mobile">
-                                        📱 {{ row.original.mobile }}
+                                    <div>
+                                        <div class="font-medium text-gray-900">{{ row.original.fullName }}</div>
+                                        <div class="text-xs text-gray-500">{{ row.original.position }}</div>
                                     </div>
                                 </template>
-                                <template #jobCategory-cell="{ row }">
-                                    <UBadge :color="getCategoryColor(row.original.jobCategory) as any" variant="soft">
-                                        {{ row.original.jobCategory || 'N/A' }}
-                                    </UBadge>
-                                </template>
-                                <template #nationality-cell="{ row }">
-                                    <span class="text-sm">{{ row.original.nationality || 'N/A' }}</span>
-                                </template>
-                                <template #designation-cell="{ row }">
-                                    <div class="text-sm">
-                                        <div>{{ row.original.designatedArea || 'N/A' }}</div>
-                                        <div class="text-xs text-gray-500" v-if="row.original.foodCategory">
-                                            {{ row.original.foodCategory }}
-                                        </div>
+                                <template #location-cell="{ row }">
+                                    <div>
+                                        <div class="font-medium">{{ row.original.building }}</div>
+                                        <div class="text-xs text-gray-500">Room {{ row.original.roomNumber }}</div>
                                     </div>
-                                </template>
-                                <template #status-cell="{ row }">
-                                    <UBadge 
-                                        :color="row.original.employeeStatus === 'Actual' ? 'success' : 'warning'" 
-                                        variant="soft">
-                                        {{ row.original.employeeStatus || 'N/A' }}
-                                    </UBadge>
                                 </template>
                                 <template #actions-cell="{ row }">
-                                    <div class="flex gap-1">
+                                    <div class="flex gap-2">
                                         <UButton 
                                             icon="i-heroicons-eye" 
-                                            size="xs" 
+                                            size="sm" 
                                             color="neutral" 
-                                            variant="ghost"
-                                            @click="viewEmployeeDetails(row.original)"
-                                            title="View Details" />
+                                            variant="soft"
+                                            @click="viewEmployeeDetails(row.original)">
+                                            View
+                                        </UButton>
                                         <UButton 
                                             icon="i-heroicons-identification" 
-                                            size="xs" 
+                                            size="sm" 
                                             color="primary" 
-                                            variant="ghost"
-                                            @click="previewEmployeeID(row.original)"
-                                            title="Preview ID" />
+                                            variant="soft"
+                                            @click="previewEmployeeID(row.original)">
+                                            ID
+                                        </UButton>
                                         <UButton 
                                             icon="i-heroicons-pencil" 
-                                            size="xs" 
+                                            size="sm" 
                                             color="warning" 
-                                            variant="ghost"
-                                            @click="editEmployee(row.original)"
-                                            title="Edit" />
+                                            variant="soft"
+                                            @click="editEmployee(row.original)">
+                                            Edit
+                                        </UButton>
                                     </div>
                                 </template>
                             </UTable>
@@ -184,14 +165,8 @@
         </div>
 
         <!-- View Details Modal -->
-        <UModal v-model="showDetailsModal">
-            <UCard :ui="{ root: 'sm:max-w-3xl' }">
-                <template #header>
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-lg font-semibold">Employee Details</h3>
-                        <UButton icon="i-heroicons-x-mark" color="neutral" variant="ghost" @click="showDetailsModal = false" />
-                    </div>
-                </template>
+        <UModal v-model:open="showDetailsModal" title="Employee Details">
+            <template #body>
                 <div v-if="selectedEmployee" class="space-y-4">
                     <div class="flex items-start gap-4">
                         <UAvatar :src="selectedEmployee.photoUrl" :alt="selectedEmployee.fullName" size="xl" />
@@ -258,23 +233,12 @@
                         </div>
                     </div>
                 </div>
-            </UCard>
+            </template>
         </UModal>
 
         <!-- Preview ID Modal -->
-        <UModal v-model="showIDPreviewModal">
-            <UCard :ui="{ root: 'sm:max-w-2xl' }">
-                <template #header>
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-lg font-semibold">Employee ID Card</h3>
-                        <div class="flex gap-2">
-                            <UButton icon="i-heroicons-printer" color="primary" variant="outline" @click="printEmployeeID">
-                                Print
-                            </UButton>
-                            <UButton icon="i-heroicons-x-mark" color="neutral" variant="ghost" @click="showIDPreviewModal = false" />
-                        </div>
-                    </div>
-                </template>
+        <UModal v-model:open="showIDPreviewModal" title="Employee ID Card">
+            <template #body>
                 <div id="employee-id-card" v-if="selectedEmployee" class="bg-white p-8">
                     <div class="border-4 border-emerald-600 rounded-lg p-6 max-w-md mx-auto">
                         <div class="text-center mb-4">
@@ -304,23 +268,25 @@
                                 <span>{{ selectedEmployee.building }} - {{ selectedEmployee.roomNumber }}</span>
                             </div>
                         </div>
-                        <div class="mt-6 flex justify-center">
-                            <img :src="getQRCodeURL(selectedEmployee.employeeId)" alt="QR Code" class="w-32 h-32" />
+                        <div class="mt-6 flex flex-col items-center">
+                            <p class="text-sm text-gray-600 mb-2">Scan QR Code for Verification</p>
+                            <img v-if="selectedEmployee.qrCode" :src="`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${selectedEmployee.qrCode}`" alt="QR Code" class="w-40 h-40 object-contain" />
+                            <img v-else :src="getQRCodeURL(selectedEmployee.employeeId)" alt="QR Code" class="w-40 h-40 object-contain" />
                         </div>
                     </div>
                 </div>
-            </UCard>
+            </template>
+            <template #footer>
+                <div class="flex justify-end gap-2">
+                    <UButton color="neutral" variant="outline" @click="showIDPreviewModal = false">Close</UButton>
+                    <UButton icon="i-heroicons-printer" color="primary" @click="printEmployeeID">Print</UButton>
+                </div>
+            </template>
         </UModal>
 
         <!-- Edit Employee Modal -->
-        <UModal v-model="showEditModal">
-            <UCard :ui="{ root: 'sm:max-w-3xl' }">
-                <template #header>
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-lg font-semibold">Edit Employee</h3>
-                        <UButton icon="i-heroicons-x-mark" color="neutral" variant="ghost" @click="showEditModal = false" />
-                    </div>
-                </template>
+        <UModal v-model:open="showEditModal" title="Edit Employee">
+            <template #body>
                 <form v-if="editingEmployee" @submit.prevent="saveEmployee" class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
@@ -380,23 +346,19 @@
                             <UInput v-model="editingEmployee.photoUrl" />
                         </div>
                     </div>
-                    <div class="flex justify-end gap-2 pt-4">
-                        <UButton color="neutral" variant="outline" @click="showEditModal = false">Cancel</UButton>
-                        <UButton type="submit" color="primary" :loading="isSaving">Save Changes</UButton>
-                    </div>
                 </form>
-            </UCard>
+            </template>
+            <template #footer>
+                <div class="flex justify-end gap-2">
+                    <UButton color="neutral" variant="outline" @click="showEditModal = false">Cancel</UButton>
+                    <UButton color="primary" :loading="isSaving" @click="saveEmployee">Save Changes</UButton>
+                </div>
+            </template>
         </UModal>
 
         <!-- Import CSV Modal -->
-        <UModal v-model="showImportModal">
-            <UCard>
-                <template #header>
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-lg font-semibold">Import Employees from CSV</h3>
-                        <UButton icon="i-heroicons-x-mark" color="neutral" variant="ghost" @click="showImportModal = false" />
-                    </div>
-                </template>
+        <UModal v-model:open="showImportModal" title="Import Employees from CSV">
+            <template #body>
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Select CSV File</label>
@@ -411,12 +373,14 @@
                         <p class="font-medium">{{ importResult.message }}</p>
                         <p v-if="importResult.details" class="text-sm mt-1">{{ importResult.details }}</p>
                     </div>
-                    <div class="flex justify-end gap-2">
-                        <UButton color="neutral" variant="outline" @click="showImportModal = false">Cancel</UButton>
-                        <UButton color="primary" @click="uploadCSV" :loading="isImporting" :disabled="!selectedFile">Import</UButton>
-                    </div>
                 </div>
-            </UCard>
+            </template>
+            <template #footer>
+                <div class="flex justify-end gap-2">
+                    <UButton color="neutral" variant="outline" @click="showImportModal = false">Cancel</UButton>
+                    <UButton color="primary" @click="uploadCSV" :loading="isImporting" :disabled="!selectedFile">Import</UButton>
+                </div>
+            </template>
         </UModal>
     </div>
 </template>
@@ -476,6 +440,7 @@ interface EmployeeRow {
     foodCategory?: string
     gender?: string
     grade?: string
+    qrCode?: string
     building: string
     roomNumber: string
     isActive: boolean
@@ -547,14 +512,26 @@ const refreshLogs = async () => {
 
 // Columns with proper accessorKey for NuxtUI
 const employeeColumns = [
-    { key: 'photoUrl', label: 'Photo', accessorKey: 'photoUrl' },
-    { key: 'employeeId', label: 'ID', accessorKey: 'employeeId' },
-    { key: 'fullName', label: 'Employee', accessorKey: 'fullName' },
-    { key: 'jobCategory', label: 'Category', accessorKey: 'jobCategory' },
-    { key: 'nationality', label: 'Nationality', accessorKey: 'nationality' },
-    { key: 'designation', label: 'Designated Area', accessorKey: 'designatedArea' },
-    { key: 'status', label: 'Status', accessorKey: 'employeeStatus' },
-    { key: 'actions', label: 'Actions', accessorKey: 'id' }
+    { 
+        key: 'photoUrl', 
+        label: 'Photo', 
+        accessorKey: 'photoUrl'
+    },
+    { 
+        key: 'fullName', 
+        label: 'Employee Name', 
+        accessorKey: 'fullName'
+    },
+    { 
+        key: 'location', 
+        label: 'Location', 
+        accessorKey: 'building'
+    },
+    { 
+        id: 'actions',
+        key: 'actions', 
+        label: 'Actions'
+    }
 ]
 
 const logsColumns = [
@@ -586,21 +563,20 @@ const stats = ref({
     unauthorizedToday: 0
 })
 
-// Check authentication
+// Check authentication and load data immediately
 onMounted(async () => {
     if (!isAuthenticated.value) {
         router.push('/admin/login')
     } else {
-        // Wait a tick to ensure accessToken is available
-        await nextTick()
+        // Load employees and logs immediately on mount
         await loadStats()
     }
 })
 
 // Watch for access token changes and refetch data
-watch(accessToken, (newToken) => {
-    if (newToken && employees.value.length === 0) {
-        loadStats()
+watch(accessToken, async (newToken) => {
+    if (newToken) {
+        await loadStats()
     }
 })
 
@@ -678,7 +654,9 @@ const saveEmployee = async () => {
 }
 
 const getQRCodeURL = (employeeId: string) => {
-    return `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${employeeId}`
+    // Use employee's unique QR code stored in database
+    // If no QR code exists, generate one with employee ID
+    return selectedEmployee.value?.qrCode || `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${employeeId}`
 }
 
 const printEmployeeID = () => {
@@ -688,17 +666,117 @@ const printEmployeeID = () => {
     const printWindow = window.open('', '', 'height=600,width=800')
     if (!printWindow) return
     
-    printWindow.document.write('<html><head><title>Employee ID Card</title>')
-    printWindow.document.write('<style>body { margin: 0; padding: 20px; font-family: system-ui; } @media print { body { margin: 0; } }</style>')
-    printWindow.document.write('</head><body>')
-    printWindow.document.write(printContent.innerHTML)
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Employee ID Card - ${selectedEmployee.value?.fullName}</title>
+            <style>
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                }
+                body {
+                    font-family: system-ui, -apple-system, sans-serif;
+                    padding: 20px;
+                    background: white;
+                }
+                .border-4 {
+                    border: 4px solid #059669;
+                    border-radius: 8px;
+                    padding: 24px;
+                    max-width: 400px;
+                    margin: 0 auto;
+                }
+                .text-center {
+                    text-align: center;
+                }
+                .mb-4 {
+                    margin-bottom: 16px;
+                }
+                .mb-3 {
+                    margin-bottom: 12px;
+                }
+                h2 {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #059669;
+                }
+                .text-sm {
+                    font-size: 14px;
+                    color: #6b7280;
+                }
+                .flex {
+                    display: flex;
+                }
+                .flex-col {
+                    flex-direction: column;
+                }
+                .items-center {
+                    align-items: center;
+                }
+                img {
+                    width: 120px;
+                    height: 120px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    margin-bottom: 12px;
+                }
+                h3 {
+                    font-size: 20px;
+                    font-weight: bold;
+                }
+                .text-gray-600 {
+                    color: #6b7280;
+                }
+                .space-y-2 > * + * {
+                    margin-top: 8px;
+                }
+                .flex-between {
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .font-semibold {
+                    font-weight: 600;
+                }
+                .mt-6 {
+                    margin-top: 24px;
+                }
+                .justify-center {
+                    justify-content: center;
+                }
+                .qr-code {
+                    width: 160px;
+                    height: 160px;
+                    border-radius: 0;
+                    object-fit: contain;
+                }
+                @media print {
+                    body {
+                        padding: 0;
+                        margin: 0;
+                    }
+                    @page {
+                        size: auto;
+                        margin: 10mm;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+    `)
+    printWindow.document.write(printContent.innerHTML.replace(/class="[^"]*"/g, (match) => {
+        // Keep essential classes for print styling
+        return match
+    }))
     printWindow.document.write('</body></html>')
     printWindow.document.close()
     printWindow.focus()
     setTimeout(() => {
         printWindow.print()
         printWindow.close()
-    }, 250)
+    }, 500)
 }
 
 const handleFileSelect = (event: Event) => {

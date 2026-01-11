@@ -1,5 +1,5 @@
 import { computed } from 'vue';
-import { o as useState } from './server.mjs';
+import { p as useState } from './server.mjs';
 
 const useAuth = () => {
   const user = useState("auth-user", () => null);
@@ -71,4 +71,4 @@ const useAuth = () => {
 };
 
 export { useAuth as u };
-//# sourceMappingURL=useAuth-C5b0AVUb.mjs.map
+//# sourceMappingURL=useAuth-BA_ZK-6_.mjs.map

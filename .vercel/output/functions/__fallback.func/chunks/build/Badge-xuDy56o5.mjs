@@ -1,7 +1,7 @@
 import { useSlots, computed, unref, mergeProps, withCtx, renderSlot, createBlock, createCommentVNode, openBlock, toDisplayString, useSSRContext } from 'vue';
 import { ssrRenderComponent, ssrRenderSlot, ssrRenderClass, ssrInterpolate } from 'vue/server-renderer';
 import { Primitive } from 'reka-ui';
-import { d as useAppConfig, i as useFieldGroup, j as useComponentIcons, t as tv, c as _sfc_main$d, e as _sfc_main$b } from './server.mjs';
+import { d as useAppConfig, j as useFieldGroup, k as useComponentIcons, t as tv, c as _sfc_main$d, e as _sfc_main$b } from './server.mjs';
 
 const theme = {
   "slots": {
@@ -364,4 +364,4 @@ _sfc_main.setup = (props, ctx) => {
 };
 
 export { _sfc_main as _ };
-//# sourceMappingURL=Badge-Q69SvwJ_.mjs.map
+//# sourceMappingURL=Badge-xuDy56o5.mjs.map

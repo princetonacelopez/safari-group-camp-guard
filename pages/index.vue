@@ -33,8 +33,15 @@
 
                 <div v-if="isCameraActive" class="space-y-4">
                     <!-- QR Scanner -->
-                    <div class="relative bg-black rounded-lg overflow-hidden" style="height: 400px;">
+                    <div class="relative bg-black rounded-lg overflow-hidden scanner-container">
                         <div id="qr-scanner" class="w-full h-full"></div>
+                        <!-- Corner brackets overlay -->
+                        <div class="scanner-overlay" :class="{ 'scan-detected': scanDetected }">
+                            <div class="corner-bracket top-left"></div>
+                            <div class="corner-bracket top-right"></div>
+                            <div class="corner-bracket bottom-left"></div>
+                            <div class="corner-bracket bottom-right"></div>
+                        </div>
                     </div>
 
                     <!-- Camera Toggle -->
@@ -142,6 +149,7 @@ const { getEmployee, saveVerificationLog, isInManningList } = useIndexedDB()
 
 const isCameraActive = ref(false)
 const isVerifying = ref(false)
+const scanDetected = ref(false)
 const manualId = ref('')
 const lastScan = ref<any>(null)
 const scanHistory = ref<any[]>([])
@@ -179,8 +187,10 @@ const startScanner = async () => {
         await html5QrCode.value.start(
             { facingMode: 'environment' },
             {
-                fps: 10,
-                qrbox: { width: 250, height: 250 }
+                fps: 20,
+                qrbox: { width: 280, height: 280 },
+                aspectRatio: 1.0,
+                disableFlip: false
             },
             onScanSuccess,
             onScanError
@@ -205,7 +215,19 @@ const switchCamera = async () => {
 }
 
 const onScanSuccess = async (decodedText: string) => {
+    // Trigger scan detected animation
+    scanDetected.value = true
+    
+    // Stop the scanner immediately after detection
+    await stopScanner()
+    
+    // Verify employee
     await verifyEmployee(decodedText)
+    
+    // Reset animation after 1 second
+    setTimeout(() => {
+        scanDetected.value = false
+    }, 1000)
 }
 
 const onScanError = (error: any) => {
@@ -298,3 +320,122 @@ onBeforeUnmount(() => {
     }
 })
 </script>
+
+<style scoped>
+.scanner-container {
+    height: 500px;
+    position: relative;
+}
+
+/* Style the scanner video */
+:deep(#qr-scanner video) {
+    object-fit: cover;
+}
+
+/* Hide the default border but keep scan region functional */
+:deep(#qr-scanner__scan_region img) {
+    opacity: 0 !important;
+}
+
+:deep(#qr-scanner__dashboard_section_csr) {
+    display: none !important;
+}
+
+.scanner-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280px;
+    height: 280px;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.corner-bracket {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 4px solid #f59e0b;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+/* Scan detected state - change to green and expand */
+.scanner-overlay.scan-detected .corner-bracket {
+    border-color: #10b981;
+    border-width: 6px;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.8);
+}
+
+.corner-bracket.top-left {
+    top: 0;
+    left: 0;
+    border-right: none;
+    border-bottom: none;
+    border-top-left-radius: 12px;
+}
+
+.corner-bracket.top-right {
+    top: 0;
+    right: 0;
+    border-left: none;
+    border-bottom: none;
+    border-top-right-radius: 12px;
+}
+
+.corner-bracket.bottom-left {
+    bottom: 0;
+    left: 0;
+    border-right: none;
+    border-top: none;
+    border-bottom-left-radius: 12px;
+}
+
+.corner-bracket.bottom-right {
+    bottom: 0;
+    right: 0;
+    border-left: none;
+    border-top: none;
+    border-bottom-right-radius: 12px;
+}
+
+/* Animation for scanning effect */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.corner-bracket {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Stop pulsing when scan detected */
+.scanner-overlay.scan-detected .corner-bracket {
+    animation: none;
+    opacity: 1;
+}
+
+/* Flash animation for scan detection */
+@keyframes flash {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.3;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.scanner-overlay.scan-detected {
+    animation: flash 0.5s ease-out;
+}
+</style>

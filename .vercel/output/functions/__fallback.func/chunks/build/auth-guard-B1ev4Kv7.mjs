@@ -1,5 +1,5 @@
-import { m as defineNuxtRouteMiddleware, n as navigateTo } from './server.mjs';
-import { u as useAuth } from './useAuth-C5b0AVUb.mjs';
+import { o as defineNuxtRouteMiddleware, n as navigateTo } from './server.mjs';
+import { u as useAuth } from './useAuth-BA_ZK-6_.mjs';
 import 'vue';
 import '../nitro/nitro.mjs';
 import '@prisma/client';
@@ -36,4 +36,4 @@ const authGuard = defineNuxtRouteMiddleware((to, from) => {
 });
 
 export { authGuard as default };
-//# sourceMappingURL=auth-guard-DwGZKI5Z.mjs.map
+//# sourceMappingURL=auth-guard-B1ev4Kv7.mjs.map

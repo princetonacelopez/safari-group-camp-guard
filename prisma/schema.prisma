@@ -26,6 +26,7 @@ model Employee {
   foodCategory   String?            @db.VarChar(50)    // Senior, Junior, General
   gender         String?            @db.VarChar(20)    // Male, Female
   grade          String?            @db.VarChar(20)    // G1, G2, G3, etc.
+  qrCode         String?            @unique @db.VarChar(255) // Unique QR code for employee
   building       String             @db.VarChar(100)
   roomNumber     String             @db.VarChar(50)
   isActive       Boolean            @default(true)

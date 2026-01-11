@@ -1,10 +1,9 @@
-import { _ as _sfc_main$2 } from './Card-DusfjMFs.mjs';
-import { _ as _sfc_main$3 } from './Input-COskIO9M.mjs';
+import { _ as _sfc_main$1$1, a as _sfc_main$2 } from './Input-DP7q2rqs.mjs';
 import { defineComponent, ref, resolveComponent, mergeProps, withCtx, unref, isRef, createVNode, createTextVNode, withModifiers, createBlock, createCommentVNode, openBlock, useSlots, computed, renderSlot, toDisplayString, Fragment, renderList, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderComponent, ssrRenderSlot, ssrRenderClass, ssrInterpolate, ssrRenderList } from 'vue/server-renderer';
 import { Primitive } from 'reka-ui';
 import { b as _sfc_main$8, a as __nuxt_component_0$1, f as useLocale, d as useAppConfig, t as tv, e as _sfc_main$b, c as _sfc_main$d, n as navigateTo } from './server.mjs';
-import { u as useAuth } from './useAuth-C5b0AVUb.mjs';
+import { u as useAuth } from './useAuth-BA_ZK-6_.mjs';
 import '@vueuse/core';
 import '../nitro/nitro.mjs';
 import '@prisma/client';
@@ -526,9 +525,9 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       isLoading.value = false;
     };
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UCard = _sfc_main$2;
+      const _component_UCard = _sfc_main$1$1;
       const _component_UFormGroup = resolveComponent("UFormGroup");
-      const _component_UInput = _sfc_main$3;
+      const _component_UInput = _sfc_main$2;
       const _component_UAlert = _sfc_main$1;
       const _component_UButton = _sfc_main$8;
       const _component_NuxtLink = __nuxt_component_0$1;
@@ -642,7 +641,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             }, _parent2, _scopeId));
             if (unref(error)) {
               _push2(ssrRenderComponent(_component_UAlert, {
-                color: "red",
+                color: "error",
                 variant: "soft",
                 title: unref(error),
                 "close-button": { icon: "i-heroicons-x-mark", color: "gray", variant: "link" },
@@ -653,7 +652,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             }
             _push2(ssrRenderComponent(_component_UButton, {
               type: "submit",
-              color: "emerald",
+              color: "success",
               size: "lg",
               block: "",
               loading: unref(isLoading)
@@ -709,7 +708,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                 }),
                 unref(error) ? (openBlock(), createBlock(_component_UAlert, {
                   key: 0,
-                  color: "red",
+                  color: "error",
                   variant: "soft",
                   title: unref(error),
                   "close-button": { icon: "i-heroicons-x-mark", color: "gray", variant: "link" },
@@ -717,7 +716,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                 }, null, 8, ["title", "onClose"])) : createCommentVNode("", true),
                 createVNode(_component_UButton, {
                   type: "submit",
-                  color: "emerald",
+                  color: "success",
                   size: "lg",
                   block: "",
                   loading: unref(isLoading)
@@ -745,4 +744,4 @@ _sfc_main.setup = (props, ctx) => {
 };
 
 export { _sfc_main as default };
-//# sourceMappingURL=login-DuFAUrbP.mjs.map
+//# sourceMappingURL=login-D2_YGwhP.mjs.map
