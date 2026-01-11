@@ -1,0 +1,141 @@
+{
+  "version": 3,
+  "overrides": {},
+  "routes": [
+    {
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      },
+      "src": "/_nuxt/builds/meta/(.*)"
+    },
+    {
+      "headers": {
+        "cache-control": "public, max-age=1, immutable"
+      },
+      "src": "/_nuxt/builds/(.*)"
+    },
+    {
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      },
+      "src": "/_fonts/(.*)"
+    },
+    {
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      },
+      "src": "/_nuxt/(.*)"
+    },
+    {
+      "src": "/_nuxt/builds/meta(.*)",
+      "headers": {
+        "cache-control": "public,max-age=31536000,immutable"
+      },
+      "continue": true
+    },
+    {
+      "src": "/_nuxt/builds(.*)",
+      "headers": {
+        "cache-control": "public,max-age=31536000,immutable"
+      },
+      "continue": true
+    },
+    {
+      "src": "/_fonts(.*)",
+      "headers": {
+        "cache-control": "public,max-age=31536000,immutable"
+      },
+      "continue": true
+    },
+    {
+      "src": "/_nuxt(.*)",
+      "headers": {
+        "cache-control": "public,max-age=31536000,immutable"
+      },
+      "continue": true
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "(?<__isr_route>/__nuxt_error)",
+      "dest": "/__fallback"
+    },
+    {
+      "src": "/api/verification-logs",
+      "dest": "/api/verification-logs"
+    },
+    {
+      "src": "/api/sync/upload",
+      "dest": "/api/sync/upload"
+    },
+    {
+      "src": "/api/sync/download",
+      "dest": "/api/sync/download"
+    },
+    {
+      "src": "/api/manning-list/import",
+      "dest": "/api/manning-list/import"
+    },
+    {
+      "src": "/api/manning-list",
+      "dest": "/api/manning-list"
+    },
+    {
+      "src": "/api/employees",
+      "dest": "/api/employees"
+    },
+    {
+      "src": "/api/auth/refresh",
+      "dest": "/api/auth/refresh"
+    },
+    {
+      "src": "/api/auth/logout",
+      "dest": "/api/auth/logout"
+    },
+    {
+      "src": "/api/auth/login",
+      "dest": "/api/auth/login"
+    },
+    {
+      "src": "/admin/login",
+      "dest": "/admin/login"
+    },
+    {
+      "src": "/admin",
+      "dest": "/admin"
+    },
+    {
+      "src": "/__nuxt_error",
+      "dest": "/__nuxt_error"
+    },
+    {
+      "src": "/",
+      "dest": "/index"
+    },
+    {
+      "src": "/api/verify/(?<employeeId>[^/]+)",
+      "dest": "/api/verify/[employeeId]"
+    },
+    {
+      "src": "/api/manning-list/(?<employeeId>[^/]+)",
+      "dest": "/api/manning-list/[employeeId]"
+    },
+    {
+      "src": "/api/employees/(?<id>[^/]+)",
+      "dest": "/api/employees/[id]"
+    },
+    {
+      "src": "/api/_nuxt_icon/(?<collection>[^/]+)",
+      "dest": "/api/_nuxt_icon/[collection]"
+    },
+    {
+      "src": "/__nuxt_island/(?:.*)",
+      "dest": "/__nuxt_island/[...]"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/__fallback"
+    }
+  ]
+}

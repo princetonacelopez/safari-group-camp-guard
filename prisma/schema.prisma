@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Employee Table
+model Employee {
+  id             Int                @id @default(autoincrement())
+  employeeId     String             @unique @db.VarChar(50)
+  fullName       String             @db.VarChar(255)
+  photoUrl       String?            @db.VarChar(500)
+  position       String             @db.VarChar(100)
+  jobCategory    String?            @db.VarChar(50)    // Job Category (Mgmt, Gen, Admin, etc.)
+  nationality    String?            @db.VarChar(50)    // Nationality
+  iqamaNumber    String?            @db.VarChar(50)    // IQAMA Number (Saudi ID)
+  mobile         String?            @db.VarChar(50)    // Mobile number
+  employeeStatus String?            @db.VarChar(50)    // Actual, Vacation, etc.
+  designatedArea String?            @db.VarChar(100)   // Community, Refinery, etc.
+  foodCategory   String?            @db.VarChar(50)    // Senior, Junior, General
+  gender         String?            @db.VarChar(20)    // Male, Female
+  grade          String?            @db.VarChar(20)    // G1, G2, G3, etc.
+  building       String             @db.VarChar(100)
+  roomNumber     String             @db.VarChar(50)
+  isActive       Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  
+  manningList    ManningList[]
+  verificationLogs VerificationLog[]
+  
+  @@index([employeeId])
+  @@index([isActive])
+  @@index([iqamaNumber])
+}
+
+// Manning List Table
+model ManningList {
+  id          Int       @id @default(autoincrement())
+  employeeId  String    @db.VarChar(50)
+  addedDate   DateTime  @default(now())
+  addedBy     String    @db.VarChar(100)
+  isActive    Boolean   @default(true)
+  
+  employee    Employee  @relation(fields: [employeeId], references: [employeeId], onDelete: Cascade)
+  
+  @@unique([employeeId])
+  @@index([employeeId])
+  @@index([isActive])
+}
+
+// Verification Logs Table
+model VerificationLog {
+  id            Int       @id @default(autoincrement())
+  employeeId    String    @db.VarChar(50)
+  scanTimestamp DateTime  @default(now())
+  verifiedBy    String    @db.VarChar(100)
+  status        String    @db.VarChar(50) // 'authorized' or 'unauthorized'
+  synced        Boolean   @default(false)
+  
+  employee      Employee  @relation(fields: [employeeId], references: [employeeId], onDelete: Cascade)
+  
+  @@index([employeeId])
+  @@index([scanTimestamp])
+  @@index([synced])
+}
+
+// Admin Users Table
+model AdminUser {
+  id           Int       @id @default(autoincrement())
+  username     String    @unique @db.VarChar(100)
+  passwordHash String    @db.VarChar(255)
+  role         String    @db.VarChar(50) @default("admin")
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  
+  @@index([username])
+}
+
